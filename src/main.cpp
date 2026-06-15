@@ -131,5 +131,6 @@ void setup() {
 }
 
 void loop() {
-  vTaskDelay(portMAX_DELAY);
+  static constexpr TickType_t LOOP_IDLE_DELAY = pdMS_TO_TICKS(1000);
+  vTaskDelay(LOOP_IDLE_DELAY);
 }
