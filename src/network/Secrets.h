@@ -1,7 +1,7 @@
 #pragma once
 
-#define WIFI_SSID "M-FRIOUC-860G11 4957"
-#define WIFI_PASSWORD "medbdo24"
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
 
 #define DEFAULT_MQTT_HOST "192.168.137.1"
 #define DEFAULT_MQTT_PORT 1883
