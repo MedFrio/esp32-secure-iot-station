@@ -1,0 +1,118 @@
+{
+  "title": "ESP32 IoT Station",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Température",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"station\" and r._field == \"temp\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Humidité",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"station\" and r._field == \"humidity\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Joystick (%)",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"station\" and r._field == \"joystickPercent\")"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Bouton poussoir",
+      "gridPos": { "x": 12, "y": 8, "w": 6, "h": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "Relâché", "color": "green" },
+                "1": { "text": "Appuyé", "color": "orange" }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 1 }
+            ]
+          }
+        }
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -15m) |> filter(fn: (r) => r._measurement == \"station\" and r._field == \"wireContact\") |> last()"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Heap libre et latence MQTT",
+      "gridPos": { "x": 18, "y": 8, "w": 6, "h": 8 },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"station\" and (r._field == \"heap\" or r._field == \"mqttLatencyMs\"))"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Anomalie capteur",
+      "gridPos": { "x": 0, "y": 16, "w": 6, "h": 6 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "OK", "color": "green" },
+                "1": { "text": "Anomalie", "color": "red" }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        }
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -15m) |> filter(fn: (r) => r._measurement == \"station\" and r._field == \"anomaly\") |> last()"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Uptime ESP32",
+      "gridPos": { "x": 6, "y": 16, "w": 6, "h": 6 },
+      "targets": [
+        {
+          "query": "from(bucket: \"esp32\") |> range(start: -15m) |> filter(fn: (r) => r._measurement == \"station\" and r._field == \"uptime\") |> last()"
+        }
+      ]
+    }
+  ]
+}

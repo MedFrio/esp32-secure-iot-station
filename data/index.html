@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Station IoT ESP32</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Station autonome ESP32</p>
+        <h1>ESP32 IoT sécurisé</h1>
+        <p class="subtitle">Capteurs, actionneurs et supervision locale en temps réel.</p>
+      </div>
+      <div class="status-row">
+        <a class="nav-link" href="/scenario.html">Scénario métier</a>
+        <span id="wifi" class="badge badge-muted">WiFi --</span>
+        <span id="mqtt" class="badge badge-muted">MQTT --</span>
+        <span id="anomaly" class="badge badge-muted">Capteurs --</span>
+      </div>
+    </header>
+
+    <section class="auth-strip">
+      <label>
+        Token API
+        <input id="apiToken" type="password" value="changeme-local-api" autocomplete="off">
+      </label>
+      <button id="saveToken">Mémoriser</button>
+      <p id="message" class="message" role="status"></p>
+    </section>
+
+    <section class="kpi-grid">
+      <article class="kpi temperature">
+        <span>Température</span>
+        <strong id="temp">--</strong>
+      </article>
+      <article class="kpi humidity">
+        <span>Humidité</span>
+        <strong id="humidity">--</strong>
+      </article>
+      <article class="kpi joystick">
+        <span>Joystick</span>
+        <strong id="joystick">--</strong>
+      </article>
+      <article class="kpi contact">
+        <span>Bouton poussoir</span>
+        <strong id="wireContact">--</strong>
+      </article>
+    </section>
+
+    <section class="dashboard">
+      <article class="panel panel-large">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Entrées</p>
+            <h2>Capteurs live</h2>
+          </div>
+        </div>
+
+        <div class="sensor-layout">
+          <div class="joystick-pad" aria-label="Etat joystick">
+            <span id="joyUp" class="joy-cell joy-up">Haut</span>
+            <span id="joyLeft" class="joy-cell joy-left">Gauche</span>
+            <span id="joyCenter" class="joy-cell joy-center">Repos</span>
+            <span id="joyRight" class="joy-cell joy-right">Droite</span>
+            <span id="joyDown" class="joy-cell joy-down">Bas</span>
+          </div>
+
+          <div class="readout-list">
+            <div class="readout">
+              <span>DHT22</span>
+              <strong id="dhtStatus">--</strong>
+            </div>
+            <div class="readout">
+              <span>Joystick brut</span>
+              <strong id="joystickRaw">--</strong>
+            </div>
+            <div class="readout">
+              <span>Dernière mesure</span>
+              <strong id="sampleAge">--</strong>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Sorties</p>
+            <h2>Actionneurs</h2>
+          </div>
+          <span id="actuatorStatus" class="badge badge-ok">Prêt</span>
+        </div>
+
+        <div class="control-stack">
+          <label class="toggle">
+            <input id="ledEnabled" type="checkbox">
+            <span>LED blanche</span>
+          </label>
+
+          <label>
+            Luminosité LED
+            <div class="range-line">
+              <input id="ledBrightness" type="range" min="0" max="255" value="180">
+              <output id="ledBrightnessValue">180</output>
+            </div>
+          </label>
+
+          <label>
+            Angle servo
+            <div class="range-line">
+              <input id="servo" type="range" min="0" max="180" value="90">
+              <output id="servoValue">90°</output>
+            </div>
+          </label>
+
+          <button id="sendActuators">Appliquer</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="dashboard">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Réseau</p>
+            <h2>Connexion</h2>
+          </div>
+        </div>
+        <div class="readout-list">
+          <div class="readout"><span>RSSI</span><strong id="rssi">--</strong></div>
+          <div class="readout"><span>Topic data</span><strong id="dataTopic">--</strong></div>
+          <div class="readout"><span>Topic cmd</span><strong id="cmdTopic">--</strong></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Système</p>
+            <h2>Supervision</h2>
+          </div>
+        </div>
+        <div class="readout-list">
+          <div class="readout"><span>Heap libre</span><strong id="heap">--</strong></div>
+          <div class="readout"><span>Uptime</span><strong id="uptime">--</strong></div>
+          <div class="readout"><span>Latence MQTT</span><strong id="latency">--</strong></div>
+          <div class="readout"><span>File offline</span><strong id="offline">--</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel config-panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Broker</p>
+          <h2>Configuration MQTT</h2>
+        </div>
+      </div>
+      <div class="form-grid">
+        <label>Host <input id="mqttHost" type="text"></label>
+        <label>Port <input id="mqttPort" type="number" min="1" max="65535"></label>
+        <label>Utilisateur <input id="mqttUser" type="text"></label>
+        <label>Mot de passe <input id="mqttPass" type="password" placeholder="laisser vide"></label>
+        <label>Groupe <input id="group" type="text"></label>
+        <label>Device ID <input id="deviceId" type="text"></label>
+        <button id="saveConfig">Sauvegarder MQTT</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

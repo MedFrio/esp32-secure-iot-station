@@ -1,0 +1,71 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: iot-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+
+  nodered:
+    build: ./nodered
+    image: iot-nodered-custom
+    container_name: iot-nodered
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    volumes:
+      - nodered_data:/data
+      - ../node-red:/project-flows
+    depends_on:
+      - mosquitto
+      - mongo
+      - influxdb
+
+  mongo:
+    image: mongo:7
+    container_name: iot-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  influxdb:
+    image: influxdb:2
+    container_name: iot-influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminadminadmin
+      DOCKER_INFLUXDB_INIT_ORG: iot
+      DOCKER_INFLUXDB_INIT_BUCKET: esp32
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: dev-token-change-me
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: iot-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - influxdb
+
+volumes:
+  nodered_data:
+  mongo_data:
+  influxdb_data:
+  grafana_data:

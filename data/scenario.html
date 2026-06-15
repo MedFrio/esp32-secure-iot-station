@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mission local technique - ESP32</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero mission-hero">
+      <div>
+        <p class="eyebrow">Mode scénario métier</p>
+        <h1>Mission : sécuriser le local technique</h1>
+        <p class="subtitle">Utilise le joystick, le bouton, la LED et le servo pour gérer une intervention comme un technicien terrain.</p>
+      </div>
+      <div class="status-row">
+        <a class="nav-link" href="/">Dashboard live</a>
+        <span id="missionScore" class="badge badge-muted">Score 0/4</span>
+      </div>
+    </header>
+
+    <section class="mission-board">
+      <article class="mission-status">
+        <p class="eyebrow">Local technique</p>
+        <h2 id="missionTitle">Initialisation...</h2>
+        <p id="missionText">Connexion à l'ESP32 en cours.</p>
+
+        <div class="mission-metrics">
+          <div><span>Température</span><strong id="mTemp">--</strong></div>
+          <div><span>Humidité</span><strong id="mHumidity">--</strong></div>
+          <div><span>Mode joystick</span><strong id="mJoystick">--</strong></div>
+          <div><span>Bouton</span><strong id="mButton">--</strong></div>
+        </div>
+      </article>
+
+      <article class="mission-controls">
+        <p class="eyebrow">Action distante</p>
+        <h2>Commande opérateur</h2>
+        <div class="mission-actions">
+          <button id="alertLed">Allumer alerte LED</button>
+          <button id="openVent">Ouvrir volet servo</button>
+          <button id="resetActuators">Retour normal</button>
+        </div>
+        <p id="missionMessage" class="message">Prêt.</p>
+      </article>
+    </section>
+
+    <section class="mission-steps">
+      <article id="step1" class="mission-step">
+        <span>1</span>
+        <div>
+          <h2>Inspection locale</h2>
+          <p>Appuie sur le bouton poussoir pour confirmer la présence du technicien.</p>
+        </div>
+      </article>
+
+      <article id="step2" class="mission-step">
+        <span>2</span>
+        <div>
+          <h2>Passage en vigilance</h2>
+          <p>Pousse le joystick à droite pour sélectionner le niveau 75 %.</p>
+        </div>
+      </article>
+
+      <article id="step3" class="mission-step">
+        <span>3</span>
+        <div>
+          <h2>Alerte ventilation</h2>
+          <p>Depuis cette page, allume la LED puis ouvre le volet avec le servo.</p>
+        </div>
+      </article>
+
+      <article id="step4" class="mission-step">
+        <span>4</span>
+        <div>
+          <h2>Retour en nominal</h2>
+          <p>Remets le joystick au repos et clique sur retour normal.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="/scenario.js"></script>
+</body>
+</html>
