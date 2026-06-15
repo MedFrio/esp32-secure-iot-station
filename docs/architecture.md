@@ -1,12 +1,12 @@
 flowchart LR
     subgraph ESP32["ESP32, firmware modulaire"]
-        SENS["sensors/\nDHT22, joystick, bouton poussoir\nfiltrage EMA, anomalies, timestamp"]
-        ACT["actuators/\nLED blanche GPIO33, micro servo SG90"]
-        NET["network/\nWiFi, MQTT QoS 1,\nreconnexion, commandes"]
-        STO["storage/\nSPIFFS offline JSONL\nNVS Preferences"]
-        WEB["web/\nindex.html, app.js, style.css\nAPI locale protégée"]
-        SEC["security/\nvalidation JSON\ntoken API\nauth MQTT"]
-        SUP["supervision\nheap, uptime, latence"]
+        SENS["sensors/<br/>DHT22, joystick, bouton poussoir<br/>filtrage EMA, anomalies, timestamp"]
+        ACT["actuators/<br/>LED blanche GPIO33, micro servo SG90"]
+        NET["network/<br/>WiFi, MQTT QoS 1<br/>reconnexion, commandes"]
+        STO["storage/<br/>SPIFFS offline JSONL<br/>NVS Preferences"]
+        WEB["web/<br/>index.html, app.js, style.css<br/>API locale protégée"]
+        SEC["security/<br/>validation JSON<br/>token API<br/>auth MQTT"]
+        SUP["supervision<br/>heap, uptime, latence"]
 
         SENS -->|"Queue FreeRTOS"| NET
         NET -->|"commande validée"| SEC
@@ -19,11 +19,11 @@ flowchart LR
         SUP --> NET
     end
 
-    MQTT["Broker MQTT Mosquitto\nauthentification"]
-    NR["Node-RED\nréception, dashboard,\ncommandes"]
-    MONGO["MongoDB\nhistorisation NoSQL"]
-    INFLUX["InfluxDB\nbase temporelle"]
-    GRAF["Grafana\ndashboard et alerte"]
+    MQTT["Broker MQTT Mosquitto<br/>authentification"]
+    NR["Node-RED<br/>réception, dashboard<br/>commandes"]
+    MONGO["MongoDB<br/>historisation NoSQL"]
+    INFLUX["InfluxDB<br/>base temporelle"]
+    GRAF["Grafana<br/>dashboard et alerte"]
 
     NET -->|"campus/groupe/device/data"| MQTT
     MQTT --> NR
