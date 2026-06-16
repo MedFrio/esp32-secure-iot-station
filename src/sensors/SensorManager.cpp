@@ -65,6 +65,10 @@ SensorStatus SensorManager::status() const {
   return currentStatus;
 }
 
+bool SensorManager::emergencyStopActive() const {
+  return digitalRead(PIN_WIRE_CONTACT) == LOW;
+}
+
 bool SensorManager::isValidTemperature(float value) {
   return !isnan(value) && value >= -20.0f && value <= 80.0f;
 }
