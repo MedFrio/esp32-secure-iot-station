@@ -8,6 +8,7 @@ class SensorManager {
 public:
   bool begin();
   bool read(SensorSample& sample);
+  bool emergencyStopActive() const;
   SensorStatus status() const;
 
 private:
