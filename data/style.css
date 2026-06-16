@@ -296,13 +296,15 @@ label {
 }
 
 input,
+select,
 button {
   min-height: 42px;
   border-radius: 8px;
   font: inherit;
 }
 
-input {
+input,
+select {
   width: 100%;
   border: 1px solid #cbd5e1;
   padding: 0 11px;
@@ -326,6 +328,29 @@ button {
 
 button:hover {
   background: #115e59;
+}
+
+.button-secondary {
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.button-secondary:hover {
+  background: #cbd5e1;
+}
+
+.button-fun {
+  background: #7c3aed;
+}
+
+.button-fun:hover {
+  background: #6d28d9;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .toggle {
@@ -498,6 +523,13 @@ code {
   margin: 14px 0;
 }
 
+.mission-manual {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 14px;
+  margin: 0 0 14px;
+}
+
 .mission-status,
 .mission-controls,
 .mission-step {
@@ -540,6 +572,34 @@ code {
 .mission-metrics strong {
   display: block;
   margin-top: 6px;
+  font-size: 1.08rem;
+}
+
+.manual-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.manual-grid div {
+  padding: 12px;
+  border: 1px solid #ddd6fe;
+  border-radius: 8px;
+  background: #faf5ff;
+}
+
+.manual-grid span {
+  display: block;
+  color: #6d28d9;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.manual-grid strong {
+  display: block;
+  margin-top: 6px;
+  color: #3b0764;
   font-size: 1.08rem;
 }
 
@@ -608,7 +668,9 @@ code {
   .scenario-grid,
   .mapping-grid,
   .mission-board,
+  .mission-manual,
   .mission-steps,
+  .manual-grid,
   .mission-metrics {
     display: grid;
     grid-template-columns: 1fr;
