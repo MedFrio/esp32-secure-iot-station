@@ -65,14 +65,39 @@ bool SecurityManager::validateMqttCommand(JsonVariantConst json, String& error) 
   }
 
   if (json["servo"].is<JsonObjectConst>()) {
-    if (!json["servo"]["angle"].is<int>()) {
-      error = "servo.angle manquant.";
+    JsonVariantConst servo = json["servo"];
+    const bool hasAngle = servo["angle"].is<int>();
+    const bool hasSweep = servo["sweep"].is<bool>();
+    const bool hasIntensity = servo["intensity"].is<int>();
+    const bool hasMode = servo["mode"].is<int>();
+
+    if (!hasAngle && !hasSweep && !hasIntensity && !hasMode) {
+      error = "servo.angle ou servo.sweep manquant.";
       return false;
     }
-    const int angle = json["servo"]["angle"].as<int>();
-    if (angle < 0 || angle > 180) {
-      error = "servo.angle invalide.";
-      return false;
+
+    if (hasAngle) {
+      const int angle = servo["angle"].as<int>();
+      if (angle < 0 || angle > 180) {
+        error = "servo.angle invalide.";
+        return false;
+      }
+    }
+
+    if (hasIntensity) {
+      const int intensity = servo["intensity"].as<int>();
+      if (intensity < 1 || intensity > 100) {
+        error = "servo.intensity invalide.";
+        return false;
+      }
+    }
+
+    if (hasMode) {
+      const int mode = servo["mode"].as<int>();
+      if (mode < 0 || mode > 2) {
+        error = "servo.mode invalide.";
+        return false;
+      }
     }
   }
 
