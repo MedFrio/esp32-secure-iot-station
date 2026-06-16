@@ -116,6 +116,33 @@
             </div>
           </label>
 
+          <label>
+            Intensité rotation
+            <div class="range-line">
+              <input id="servoIntensity" type="range" min="1" max="100" value="50">
+              <output id="servoIntensityValue">50%</output>
+            </div>
+          </label>
+
+          <label>
+            Mode mouvement
+            <select id="servoMode">
+              <option value="0">Balayage rapide</option>
+              <option value="1">Scan radar</option>
+              <option value="2">Secousse alerte</option>
+            </select>
+          </label>
+
+          <div class="action-row">
+            <button id="startServoSweep" type="button">Rotation continue</button>
+            <button id="stopServoSweep" class="button-secondary" type="button">Annuler</button>
+          </div>
+
+          <div class="action-row">
+            <button id="servoPresetRadar" type="button">Mode radar</button>
+            <button id="servoPresetAlert" type="button">Mode alerte</button>
+          </div>
+
           <button id="sendActuators">Appliquer</button>
         </div>
       </article>
