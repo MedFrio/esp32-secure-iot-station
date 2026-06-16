@@ -45,9 +45,9 @@ function formatUptime(seconds) {
 }
 
 function joystickLabel(value) {
-  if (value === 25) return 'Gauche 25 %';
+  if (value === 25) return 'Droite 25 %';
   if (value === 50) return 'Haut 50 %';
-  if (value === 75) return 'Droite 75 %';
+  if (value === 75) return 'Gauche 75 %';
   if (value === 100) return 'Bas 100 %';
   return 'Repos 0 %';
 }
@@ -55,9 +55,9 @@ function joystickLabel(value) {
 function updateJoystickPad(value) {
   const cells = {
     0: $('joyCenter'),
-    25: $('joyLeft'),
+    25: $('joyRight'),
     50: $('joyUp'),
-    75: $('joyRight'),
+    75: $('joyLeft'),
     100: $('joyDown')
   };
 
@@ -96,6 +96,15 @@ function syncActuatorControls(actuators) {
   if (typeof actuators.servoAngle === 'number') {
     $('servo').value = actuators.servoAngle;
     $('servoValue').textContent = `${actuators.servoAngle}°`;
+  }
+
+  if (typeof actuators.servoSweepIntensity === 'number') {
+    $('servoIntensity').value = actuators.servoSweepIntensity;
+    $('servoIntensityValue').textContent = `${actuators.servoSweepIntensity}%`;
+  }
+
+  if (typeof actuators.servoSweepMode === 'number') {
+    $('servoMode').value = String(actuators.servoSweepMode);
   }
 
   hasSyncedActuators = true;
@@ -160,7 +169,10 @@ async function sendActuators() {
           brightness: Number($('ledBrightness').value)
         },
         servo: {
-          angle: Number($('servo').value)
+          angle: Number($('servo').value),
+          sweep: false,
+          intensity: Number($('servoIntensity').value),
+          mode: Number($('servoMode').value)
         }
       })
     });
@@ -172,6 +184,41 @@ async function sendActuators() {
     setBadge(actuatorStatus, 'Erreur', 'error');
     showMessage(`Commande refusée : ${error.message}`, 'error');
   }
+}
+
+async function sendServoSweep(enabled) {
+  try {
+    setBadge(actuatorStatus, enabled ? 'Rotation...' : 'Arrêt...', 'warn');
+    clearTimeout(actuatorTimer);
+
+    const servoCommand = {
+      sweep: enabled,
+      intensity: Number($('servoIntensity').value),
+      mode: Number($('servoMode').value),
+      angle: enabled ? 90 : Number($('servo').value)
+    };
+
+    await fetchJson('/api/actuators', {
+      method: 'POST',
+      body: JSON.stringify({
+        servo: servoCommand
+      })
+    });
+
+    setBadge(actuatorStatus, enabled ? 'Rotation active' : 'Rotation arrêtée', 'ok');
+    showMessage(enabled ? 'Rotation continue du servo démarrée.' : 'Rotation continue annulée.', 'ok');
+    refreshState();
+  } catch (error) {
+    setBadge(actuatorStatus, 'Erreur', 'error');
+    showMessage(`Commande refusée : ${error.message}`, 'error');
+  }
+}
+
+function startServoPreset(mode, intensity) {
+  $('servoMode').value = String(mode);
+  $('servoIntensity').value = String(intensity);
+  $('servoIntensityValue').textContent = `${intensity}%`;
+  sendServoSweep(true);
 }
 
 function scheduleActuatorSend() {
@@ -197,6 +244,21 @@ $('servo').addEventListener('input', () => {
   $('servoValue').textContent = `${$('servo').value}°`;
   scheduleActuatorSend();
 });
+
+$('servoIntensity').addEventListener('input', () => {
+  $('servoIntensityValue').textContent = `${$('servoIntensity').value}%`;
+});
+
+$('servoMode').addEventListener('change', () => {
+  if (actuatorStatus.textContent.includes('Rotation')) {
+    sendServoSweep(true);
+  }
+});
+
+$('startServoSweep').addEventListener('click', () => sendServoSweep(true));
+$('stopServoSweep').addEventListener('click', () => sendServoSweep(false));
+$('servoPresetRadar').addEventListener('click', () => startServoPreset(1, 75));
+$('servoPresetAlert').addEventListener('click', () => startServoPreset(2, 100));
 
 $('sendActuators').addEventListener('click', sendActuators);
 
