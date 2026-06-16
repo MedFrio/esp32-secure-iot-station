@@ -46,6 +46,38 @@
       </article>
     </section>
 
+    <section class="mission-manual">
+      <article class="mission-status">
+        <p class="eyebrow">Etape facultative</p>
+        <h2>Prise de commande manuelle du servo</h2>
+        <p>Active ce mode pour piloter le volet simule directement avec le joystick. Il ne compte pas dans le score, mais il montre la commande locale en temps reel.</p>
+        <div class="manual-grid">
+          <div>
+            <span>Commande joystick</span>
+            <strong id="manualDirection">Repos</strong>
+          </div>
+          <div>
+            <span>Angle servo demande</span>
+            <strong id="manualAngle">90 deg</strong>
+          </div>
+          <div>
+            <span>Etat</span>
+            <strong id="manualState">Inactif</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="mission-controls">
+        <p class="eyebrow">Pilotage local</p>
+        <h2>Joystick vers servo</h2>
+        <div class="mission-actions">
+          <button id="enableManualServo" class="button-fun">Prendre la main</button>
+          <button id="disableManualServo" class="button-secondary">Annuler pilotage</button>
+        </div>
+        <p class="message">Droite 140 deg, haut 75 deg, repos 90 deg, gauche 35 deg, bas 170 deg.</p>
+      </article>
+    </section>
+
     <section class="mission-steps">
       <article id="step1" class="mission-step">
         <span>1</span>
@@ -59,7 +91,7 @@
         <span>2</span>
         <div>
           <h2>Passage en vigilance</h2>
-          <p>Pousse le joystick à droite pour sélectionner le niveau 75 %.</p>
+          <p>Pousse le joystick a droite pour selectionner le niveau de vigilance.</p>
         </div>
       </article>
 
